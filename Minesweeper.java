@@ -3,16 +3,14 @@ import java.util.*;
 import java.math.*;
 
 public class Minesweeper {
-	private static int row, column;
+	private static int row, column, amount;
 	private static char[][] minefield;
-	ArrayList answer;
+	private static ArrayList<int[]> answer = new ArrayList<int[]>();
 	
-	public static void main(String[] args) {		
-		makeMinefield();
-		printMinefield();
-	}
+	
 	public static void makeMinefield() {
 		Scanner scan = new Scanner(System.in);
+		
 		System.out.print("# of rows: ");
 		row = scan.nextInt();
 		System.out.print("# of columns: ");
@@ -27,15 +25,21 @@ public class Minesweeper {
 	}
 	
 	//randomly chooses coordinates to be mines
-	public static void makeMines(int amount) {
-		double x;
-		double y;
-		for(int i = 0; i < amount; i++) {
-			x = Math.random() * (column + 1);
-			y = Math.random() * (row + 1);
-			
-		}
+	public static void makeMines() {
+		Scanner scan = new Scanner(System.in);
 		
+		System.out.print("# of mines: ");
+		amount = scan.nextInt();
+		for(int i = 0; i < amount; i++) {
+			double x = Math.random() * (column + 1);
+			double y = Math.random() * (row + 1);
+			int[] coordinates = {row, column};
+			
+			//no duplicates
+			if(!answer.contains(coordinates)) {
+				answer.add(coordinates);
+			}
+		}
 	}
 	
 	//displays minefield
