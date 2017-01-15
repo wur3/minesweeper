@@ -60,7 +60,11 @@ public class Minesweeper {
 		int gx = scan.nextInt();
 		System.out.print("Guess the y coordinate: ");
 		int gy = scan.nextInt();
-		//...
+		//FIX ME: prevent guesses that go outside the minefield
+		//if there are mines around it, make the coordinate change into the number of mines
+		//else become clear space and scan in a 1 unit radius for mines
+		//placeholder to test reading input
+		minefield[gy][gx]='X';
 	}
 
 }
