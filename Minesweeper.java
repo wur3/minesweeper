@@ -31,14 +31,15 @@ public class Minesweeper {
 		System.out.print("# of mines: ");
 		amount = scan.nextInt();
 		for(int i = 0; i < amount; i++) {
-			double x = Math.random() * (column + 1);
-			double y = Math.random() * (row + 1);
-			int[] coordinates = {row, column};
+			int x = (int)(Math.random() * (column + 1));
+			int y = (int)(Math.random() * (row + 1));
+			//FIX ME: only here to print out answers for testing. Remove when finished
+			System.out.println("("+x+","+y+")");
+			int[] coordinates = {y, x};
 			
-			//no duplicates
-			if(!answer.contains(coordinates)) {
-				answer.add(coordinates);
-			}
+			//FIX ME: modify to prevent repeat in coordinates5
+			answer.add(coordinates);
+			
 		}
 	}
 	
