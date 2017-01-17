@@ -39,3 +39,7 @@ printAnswers()
 guess_row = int(input("Guess Row:"))
 guess_col = int(input("Guess Col:"))
 
+guess = {guess_row, guess_col}
+if guess in answers:
+    print("Guessed correctly")
+
