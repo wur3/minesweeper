@@ -50,6 +50,13 @@ guess_col = int(input("Guess Col:"))
 while guess_col < 0 or guess_col > (col - 1):
     guess_col = int(input("That's not even on the board! Guess Col: "))
 
+#used in perim
+def is_mine(r, c):
+    if {c, r} in answers:
+        return True
+    else:
+        return False
+    
 #checks if row is on border     
 def perim(r, c):
     count = 0
@@ -57,17 +64,37 @@ def perim(r, c):
         #no r-1
         if c == 0:
             #no c-1
+            
         elif c == (col - 1):
             #no c+1
-            
     elif r == (row - 1):
         #no r+1
         if c == 0:
             #no c-1
         elif c == (col - 1):
             #no c+1
-    
-     
+    else:
+        #no restriction
+        if is_mine(r - 1, c - 1):
+            count++
+        if is_mine(r - 1, c):
+            count++
+        if is_mine(r - 1, c + 1):
+            count++
+        if is_mine(r, c - 1):
+            count++
+        if is_mine(r, c):
+            count++
+        if is_mine(r, c + 1):
+            count++
+        if is_mine(r + 1, c - 1):
+            count++
+        if is_mine(r + 1, c):
+            count++
+        if is_mine(r + 1, c + 1):
+            count++
+        
+        
 #if you guess directly on a mine's position
 if {guess_row, guess_col} in answers:
     print("GAME OVER")
