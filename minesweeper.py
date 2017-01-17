@@ -35,23 +35,38 @@ for x in range(0,mine_count):
     mine_row = rand_row(board)
     mine_col = rand_col(board)
     answers.append({mine_col,mine_row})
-#for testing purposes only
+#for testing purposes only - hide when finished
 def printAnswers():
     for answer in answers:
         print(answer)
 printAnswers()
 
 #restrict guesses to be within board
-
 guess_row = int(input("Guess Row:"))
 while guess_row < 0 or guess_row > (row - 1):
-    guess_row = int(input("That's not even on the board! Guess Row:"))
+    guess_row = int(input("That's not even on the board! Guess Row: "))
     
 guess_col = int(input("Guess Col:"))
 while guess_col < 0 or guess_col > (col - 1):
-    guess_col = int(input("That's not even on the board! Guess Col:"))
+    guess_col = int(input("That's not even on the board! Guess Col: "))
 
-
+#checks if row is on border     
+def perim(r, c):
+    count = 0
+    if r == 0:
+        #no r-1
+        if c == 0:
+            #no c-1
+        elif c == (col - 1):
+            #no c+1
+            
+    elif r == (row - 1):
+        #no r+1
+        if c == 0:
+            #no c-1
+        elif c == (col - 1):
+            #no c+1
+    
      
 #if you guess directly on a mine's position
 if {guess_row, guess_col} in answers:
@@ -62,3 +77,7 @@ if {guess_row, guess_col} in answers:
             if {rows, columns} in answers:    
                 board[rows][columns] = "X"
     print_board(board)
+    
+else:
+    if perim(guess_row, row) == 0:
+        
