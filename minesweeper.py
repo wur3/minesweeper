@@ -3,7 +3,7 @@ from random import randint
 board = []
 row = 6
 col = 7
-mine_count = 5
+mine_count = 10
 """ Use when done testing
 row = int(input("# of rows: "))
 col = int(input("# of columns: "))
@@ -55,7 +55,7 @@ while(True):
     
     #used in perim
     def is_mine(r, c):
-        if {c, r} in answers:
+        if {r, c} in answers:
             return True
         else:
             return False       
@@ -116,9 +116,44 @@ while(True):
                 count += 1
             if is_mine(r + 1, c + 1):
                 count += 1
+                
         board[r][c] = str(count)
-        return count
-    
+        if count == 0:
+            if r == 0:
+                #no r-1
+                if c == 0:
+                    #no c-1
+                    perim(r, c + 1)
+                    perim(r + 1, c)
+                    perim(r + 1, c + 1)
+                elif c == (col - 1):
+                    #no c+1
+                    perim(r, c - 1)
+                    perim(r + 1, c - 1)
+                    perim(r + 1, c)
+            elif r == (row - 1):
+                #no r+1
+                if c == 0:
+                    #no c-1
+                    perim(r - 1, c)
+                    perim(r - 1, c + 1)
+                    perim(r, c + 1)
+                elif c == (col - 1):
+                    #no c+1
+                    perim(r - 1, c - 1)
+                    perim(r - 1, c)
+                    perim(r, c - 1)
+            else:
+                #no restriction
+                perim(r - 1, c - 1)
+                perim(r - 1, c)
+                perim(r - 1, c + 1)
+                perim(r, c - 1)
+                perim(r, c + 1)
+                perim(r + 1, c - 1)
+                perim(r + 1, c)
+                perim(r + 1, c + 1)
+            
     #if you guess directly on a mine's position
     if {guess_row, guess_col} in answers:
         print("GAME OVER")
@@ -130,40 +165,7 @@ while(True):
         print_board(board)
         
     else:
-        if perim(guess_row, guess_col) == 0:
-            if guess_row == 0:
-                #no guess_row-1
-                if guess_col == 0:
-                    #no guess_col-1
-                    perim(guess_row, guess_col + 1)
-                    perim(guess_row + 1, guess_col)
-                    perim(guess_row + 1, guess_col + 1)
-                elif guess_col == (col - 1):
-                    #no c+1
-                    perim(guess_row, guess_col - 1)
-                    perim(guess_row + 1, guess_col - 1)
-                    perim(guess_row + 1, guess_col)
-            elif guess_row == (row - 1):
-                #no guess_row+1
-                if guess_col == 0:
-                    #no guess_col-1
-                    perim(guess_row - 1, guess_col)
-                    perim(guess_row - 1, guess_col + 1)
-                    perim(guess_row, guess_col + 1)
-                elif guess_col == (col - 1):
-                    #no guess_col+1
-                    perim(guess_row - 1, guess_col - 1)
-                    perim(guess_row - 1, guess_col)
-                    perim(guess_row, guess_col - 1)
-            else:
-                #no restriction
-                perim(guess_row - 1, guess_col - 1)
-                perim(guess_row - 1, guess_col)
-                perim(guess_row - 1, guess_col + 1)
-                perim(guess_row, guess_col - 1)
-                perim(guess_row, guess_col + 1)
-                perim(guess_row + 1, guess_col - 1)
-                perim(guess_row + 1, guess_col)
-                perim(guess_row + 1, guess_col + 1)
+        perim(guess_row, guess_col)
+            
         print_board(board)
     turn += 1 
