@@ -3,13 +3,14 @@ from random import randint
 board = []
 row = 6
 col = 7
-mine_count = 10
+mine_count = 4
 """ Use when done testing
 row = int(input("# of rows: "))
 col = int(input("# of columns: "))
 mine_count = int(input("# of mines: "))
 """
 answers = []
+checked = []
 
 #creates board
 for x in range(0, row):
@@ -34,7 +35,8 @@ def rand_col(board):
 for x in range(0,mine_count):
     mine_row = rand_row(board)
     mine_col = rand_col(board)
-    answers.append({mine_row,mine_col})
+    #print(str(mine_row)+" "+str(mine_col))
+    answers.append({mine_row, mine_col})
 #for testing purposes only - hide when finished
 def printAnswers():
     for answer in answers:
@@ -42,118 +44,56 @@ def printAnswers():
 printAnswers()
 
 turn = 1
-while(True):
+keepGoing = True
+while(keepGoing):
     print("\nTurn " + str(turn) + "---------------")
     #restrict guesses to be within board
-    guess_row = int(input("Guess Row:"))
+    guess_row = int(input("Guess Row: "))
     while guess_row < 0 or guess_row > row - 1:
         guess_row = int(input("That's not even on the board! Guess Row: "))
         
-    guess_col = int(input("Guess Col:"))
+    guess_col = int(input("Guess Col: "))
     while guess_col < 0 or guess_col > col - 1:
         guess_col = int(input("That's not even on the board! Guess Col: "))
     
-    #used in perim
+    
     def is_mine(r, c):
         if {r, c} in answers:
             return True
         else:
-            return False       
-                   
+            return False
+    def within(r, c):
+        if r < 0 or r > row - 1:
+            return False
+        if c < 0 or c > col - 1:
+            return False
+        return True
+    
+    def search(r, c):
+        if not within(r, c):
+            return
+        
+        if {r, c} in checked:
+            return
+        
+        if is_mine(r, c):
+            return
+        
+        checked.append({r, c})
+        
+        board[r][c] = str(perim(r, c))
+        if perim(r, c) > 0:
+            return
+        
+        for (dr, dc) in [(r-1, c-1), (r-1, c), (r-1, c+1), (r, c-1), (r, c+1), (r+1, c-1), (r+1, c), (r+1, c+1)]:
+            search(dr, dc)          
+        
     def perim(r, c):
         count = 0
-        if r == 0:
-            #no r-1
-            if c == 0:
-                #no c-1
-                if is_mine(r, c + 1):
-                    count += 1
-                if is_mine(r + 1, c):
-                    count += 1
-                if is_mine(r + 1, c + 1):
-                    count += 1
-            elif c == (col - 1):
-                #no c+1
-                if is_mine(r, c - 1):
-                    count += 1
-                if is_mine(r + 1, c - 1):
-                    count += 1
-                if is_mine(r + 1, c):
-                    count += 1
-        elif r == (row - 1):
-            #no r+1
-            if c == 0:
-                #no c-1
-                if is_mine(r - 1, c):
-                    count += 1
-                if is_mine(r - 1, c + 1):
-                    count += 1
-                if is_mine(r, c + 1):
-                    count += 1
-            elif c == (col - 1):
-                #no c+1
-                if is_mine(r - 1, c - 1):
-                    count += 1
-                if is_mine(r - 1, c):
-                    count += 1
-                if is_mine(r, c - 1):
-                    count += 1
-        else:
-            #no restriction
-            if is_mine(r - 1, c - 1):
+        for (dr, dc) in [(r-1, c-1), (r-1, c), (r-1, c+1), (r, c-1), (r, c+1), (r+1, c-1), (r+1, c), (r+1, c+1)]:
+            if within(dr, dc) and is_mine(dr, dc):
                 count += 1
-            if is_mine(r - 1, c):
-                count += 1
-            if is_mine(r - 1, c + 1):
-                count += 1
-            if is_mine(r, c - 1):
-                count += 1
-            if is_mine(r, c + 1):
-                count += 1
-            if is_mine(r + 1, c - 1):
-                count += 1
-            if is_mine(r + 1, c):
-                count += 1
-            if is_mine(r + 1, c + 1):
-                count += 1
-                
-        board[r][c] = str(count)
-        if count == 0:
-            if r == 0:
-                #no r-1
-                if c == 0:
-                    #no c-1
-                    perim(r, c + 1)
-                    perim(r + 1, c)
-                    perim(r + 1, c + 1)
-                elif c == (col - 1):
-                    #no c+1
-                    perim(r, c - 1)
-                    perim(r + 1, c - 1)
-                    perim(r + 1, c)
-            elif r == (row - 1):
-                #no r+1
-                if c == 0:
-                    #no c-1
-                    perim(r - 1, c)
-                    perim(r - 1, c + 1)
-                    perim(r, c + 1)
-                elif c == (col - 1):
-                    #no c+1
-                    perim(r - 1, c - 1)
-                    perim(r - 1, c)
-                    perim(r, c - 1)
-            else:
-                #no restriction
-                perim(r - 1, c - 1)
-                perim(r - 1, c)
-                perim(r - 1, c + 1)
-                perim(r, c - 1)
-                perim(r, c + 1)
-                perim(r + 1, c - 1)
-                perim(r + 1, c)
-                perim(r + 1, c + 1)
-            
+        return count
     #if you guess directly on a mine's position
     if {guess_row, guess_col} in answers:
         print("GAME OVER")
@@ -163,9 +103,8 @@ while(True):
                 if {rows, columns} in answers:    
                     board[rows][columns] = "X"
         print_board(board)
-        
+        keepGoing = False
     else:
-        perim(guess_row, guess_col)
-            
+        search(guess_row, guess_col)    
         print_board(board)
     turn += 1 
