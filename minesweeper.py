@@ -79,15 +79,20 @@ while(keepGoing):
         if is_mine(r, c):
             return
         
-        checked.append({r, c})
+        
+        
+        if perim(r, c) > 0:
+            print(r, c, " >0 !")
+            board[r][c] = str(perim(r, c))
+            return
         
         board[r][c] = str(perim(r, c))
-        if perim(r, c) > 0:
-            return
+        checked.append({r, c})
+        print(r, c, " checked and is ", str(perim(r, c)))
         
         for (dr, dc) in [(r-1, c-1), (r-1, c), (r-1, c+1), (r, c-1), (r, c+1), (r+1, c-1), (r+1, c), (r+1, c+1)]:
             search(dr, dc)          
-        
+            
     def perim(r, c):
         count = 0
         for (dr, dc) in [(r-1, c-1), (r-1, c), (r-1, c+1), (r, c-1), (r, c+1), (r+1, c-1), (r+1, c), (r+1, c+1)]:
