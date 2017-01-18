@@ -41,7 +41,9 @@ def printAnswers():
         print(answer)
 printAnswers()
 
+turn = 1
 while(True):
+    print("\nTurn " + str(turn) + "---------------")
     #restrict guesses to be within board
     guess_row = int(input("Guess Row:"))
     while guess_row < 0 or guess_row > row - 1:
@@ -115,6 +117,8 @@ while(True):
             if is_mine(r + 1, c + 1):
                 count += 1
         board[r][c] = str(count)
+        return count
+    
     #if you guess directly on a mine's position
     if {guess_row, guess_col} in answers:
         print("GAME OVER")
@@ -126,6 +130,40 @@ while(True):
         print_board(board)
         
     else:
-        perim(guess_row, guess_col)
+        if perim(guess_row, guess_col) == 0:
+            if guess_row == 0:
+                #no guess_row-1
+                if guess_col == 0:
+                    #no guess_col-1
+                    perim(guess_row, guess_col + 1)
+                    perim(guess_row + 1, guess_col)
+                    perim(guess_row + 1, guess_col + 1)
+                elif guess_col == (col - 1):
+                    #no c+1
+                    perim(guess_row, guess_col - 1)
+                    perim(guess_row + 1, guess_col - 1)
+                    perim(guess_row + 1, guess_col)
+            elif guess_row == (row - 1):
+                #no guess_row+1
+                if guess_col == 0:
+                    #no guess_col-1
+                    perim(guess_row - 1, guess_col)
+                    perim(guess_row - 1, guess_col + 1)
+                    perim(guess_row, guess_col + 1)
+                elif guess_col == (col - 1):
+                    #no guess_col+1
+                    perim(guess_row - 1, guess_col - 1)
+                    perim(guess_row - 1, guess_col)
+                    perim(guess_row, guess_col - 1)
+            else:
+                #no restriction
+                perim(guess_row - 1, guess_col - 1)
+                perim(guess_row - 1, guess_col)
+                perim(guess_row - 1, guess_col + 1)
+                perim(guess_row, guess_col - 1)
+                perim(guess_row, guess_col + 1)
+                perim(guess_row + 1, guess_col - 1)
+                perim(guess_row + 1, guess_col)
+                perim(guess_row + 1, guess_col + 1)
         print_board(board)
-        
+    turn += 1 
