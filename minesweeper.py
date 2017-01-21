@@ -11,8 +11,6 @@ col = int(input("# of columns: "))
 mine_count = int(input("# of mines: "))
 """
 
-checked = []
-
 #creates board
 board = [["?" for x in range(col)] for y in range(row)] 
 answer = [["0" for x in range(col)] for y in range(row)] 
@@ -56,11 +54,11 @@ while(keepGoing):
     while guess_col < 0 or guess_col > col - 1:
         guess_col = int(input("That's not even on the board! Guess Col: "))
     
-    if {guess_row, guess_col} in checked:
+    if board[guess_row][guess_col]=="0":
         print("That point was already checked!")
     
     def is_mine(r, c):
-        if {r, c} in answer:
+        if answer[r][c]=="X":
             return True
         else:
             return False
@@ -73,23 +71,24 @@ while(keepGoing):
     
     def search(r, c):
         if not within(r, c): #if out of bounds
+            print(r, c, " is out of bounds")
             return
         
-        if {r, c} in checked: #if already checked
+        if not board[r][c]=="?": #if already checked
+            print(r, c, " is not ?")
             return
         
         if is_mine(r, c): #if a mine
+            print(r, c, " is a mine")
             return
         
         if perim(r, c) > 0: #it is adjacent to at least one mine
             board[r][c] = str(perim(r, c))
+            print(r, c, " has an adjacent mine")
             return
         else:
             board[r][c] = " "
-        
-        if {r, c} not in checked:
-            checked.append({r, c})
-        
+        return
         for (dr, dc) in [(r+1, c), (r-1, c), (r, c+1), (r, c-1), (r+1, c+1), (r-1, c+1), (r+1, c-1), (r-1, c-1)]:
             search(dr, dc)
             
