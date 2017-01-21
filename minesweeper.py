@@ -27,7 +27,6 @@ print_board()
 def print_answer():
     for row in answer:
         print(" ".join(row))
-print_answer()
 
 #picks random coordinate for row
 def rand_row(board):
@@ -37,12 +36,13 @@ def rand_row(board):
 def rand_col(board):
     return randint(0, len(board[0]) - 1)
 
-#adding mine coordinate to list of answer
+#adding mines to answer
 for x in range(0,mine_count):
     mine_row = rand_row(board)
     mine_col = rand_col(board)
-    answer[mine_row][mine_col] = -1
-
+    answer[mine_row][mine_col] = "X"
+    
+print_answer()
 turn = 1
 keepGoing = True
 while(keepGoing):
@@ -89,8 +89,7 @@ while(keepGoing):
         
         if {r, c} not in checked:
             checked.append({r, c})
-        #[(r+1, c), (r-1, c), (r, c+1), (r, c-1), (r+1, c+1), (r-1, c+1), (r+1, c-1), (r-1, c-1)]
-        #[(r, c+1), (r, c-1), (r+1, c), (r-1, c), (r+1, c+1), (r+1, c-1), (r-1, c+1), (r-1, c-1)]    
+        
         for (dr, dc) in [(r+1, c), (r-1, c), (r, c+1), (r, c-1), (r+1, c+1), (r-1, c+1), (r+1, c-1), (r-1, c-1)]:
             search(dr, dc)
             
@@ -102,16 +101,16 @@ while(keepGoing):
         return count
     
     #if you guess directly on a mine's position
-    if {guess_row, guess_col} in answer:
+    if answer[guess_row][guess_col]=="X":
         print("GAME OVER")
         #checks for all coordinates in list 'answer' and sets them to "X" from "?"
         for columns in range(len(board[0])):
             for rows in range(len(board)):
                 if {rows, columns} in answer:    
                     board[rows][columns] = "X"
-        print_board(board)
+        print_answer()
         keepGoing = False
     else:
         search(guess_row, guess_col)
-        print_board(board)
+        print_board()
     turn += 1 
