@@ -88,9 +88,9 @@ while(keepGoing):
             return
         else:
             board[r][c] = " "
-        return
-        for (dr, dc) in [(r+1, c), (r-1, c), (r, c+1), (r, c-1), (r+1, c+1), (r-1, c+1), (r+1, c-1), (r-1, c-1)]:
-            search(dr, dc)
+        
+            for (dr, dc) in [(r+1, c), (r-1, c), (r, c+1), (r, c-1), (r+1, c+1), (r-1, c+1), (r+1, c-1), (r-1, c-1)]:
+                search(dr, dc)
             
     def perim(r, c):
         count = 0
@@ -102,11 +102,6 @@ while(keepGoing):
     #if you guess directly on a mine's position
     if answer[guess_row][guess_col]=="X":
         print("GAME OVER")
-        #checks for all coordinates in list 'answer' and sets them to "X" from "?"
-        for columns in range(len(board[0])):
-            for rows in range(len(board)):
-                if {rows, columns} in answer:    
-                    board[rows][columns] = "X"
         print_answer()
         keepGoing = False
     else:
