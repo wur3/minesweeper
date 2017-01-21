@@ -1,7 +1,7 @@
 from random import randint
 import random
 random.seed(1)
-board = []
+
 row = 10
 col = 10
 mine_count = 4
@@ -10,19 +10,24 @@ row = int(input("# of rows: "))
 col = int(input("# of columns: "))
 mine_count = int(input("# of mines: "))
 """
-answers = []
+
 checked = []
 
 #creates board
-for x in range(0, row):
-    board.append(["?"] * col)
+board = [["?" for x in range(col)] for y in range(row)] 
+answer = [["0" for x in range(col)] for y in range(row)] 
 
 #prints board
-def print_board(board):
+def print_board():
     for row in board:
         print(" ".join(row))
+print_board()
 
-print_board(board)
+#prints answer
+def print_answer():
+    for row in answer:
+        print(" ".join(row))
+print_answer()
 
 #picks random coordinate for row
 def rand_row(board):
@@ -32,17 +37,11 @@ def rand_row(board):
 def rand_col(board):
     return randint(0, len(board[0]) - 1)
 
-#adding mine coordinate to list of answers
+#adding mine coordinate to list of answer
 for x in range(0,mine_count):
     mine_row = rand_row(board)
     mine_col = rand_col(board)
-    #print(str(mine_row)+" "+str(mine_col))
-    answers.append({mine_row, mine_col})
-#for testing purposes only - hide when finished
-def printAnswers():
-    for answer in answers:
-        print(answer)
-printAnswers()
+    answer[mine_row][mine_col] = -1
 
 turn = 1
 keepGoing = True
@@ -61,7 +60,7 @@ while(keepGoing):
         print("That point was already checked!")
     
     def is_mine(r, c):
-        if {r, c} in answers:
+        if {r, c} in answer:
             return True
         else:
             return False
@@ -90,25 +89,25 @@ while(keepGoing):
         
         if {r, c} not in checked:
             checked.append({r, c})
-        print(r, c, " checked and is set to ", str(perim(r, c)))
-        
-        for (dr, dc) in [(r-1, c-1), (r-1, c), (r-1, c+1), (r, c-1), (r, c+1), (r+1, c-1), (r+1, c), (r+1, c+1)]:
-            search(dr, dc)          
+        #[(r+1, c), (r-1, c), (r, c+1), (r, c-1), (r+1, c+1), (r-1, c+1), (r+1, c-1), (r-1, c-1)]
+        #[(r, c+1), (r, c-1), (r+1, c), (r-1, c), (r+1, c+1), (r+1, c-1), (r-1, c+1), (r-1, c-1)]    
+        for (dr, dc) in [(r+1, c), (r-1, c), (r, c+1), (r, c-1), (r+1, c+1), (r-1, c+1), (r+1, c-1), (r-1, c-1)]:
+            search(dr, dc)
             
     def perim(r, c):
         count = 0
-        for (dr, dc) in [(r-1, c-1), (r-1, c), (r-1, c+1), (r, c-1), (r, c+1), (r+1, c-1), (r+1, c), (r+1, c+1)]:
+        for (dr, dc) in [(r, c+1), (r, c-1), (r+1, c), (r-1, c), (r+1, c+1), (r+1, c-1), (r-1, c+1), (r-1, c-1)]:
             if within(dr, dc) and is_mine(dr, dc):
                 count += 1
         return count
     
     #if you guess directly on a mine's position
-    if {guess_row, guess_col} in answers:
+    if {guess_row, guess_col} in answer:
         print("GAME OVER")
-        #checks for all coordinates in list 'answers' and sets them to "X" from "?"
+        #checks for all coordinates in list 'answer' and sets them to "X" from "?"
         for columns in range(len(board[0])):
             for rows in range(len(board)):
-                if {rows, columns} in answers:    
+                if {rows, columns} in answer:    
                     board[rows][columns] = "X"
         print_board(board)
         keepGoing = False
