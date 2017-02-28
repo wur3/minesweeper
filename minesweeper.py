@@ -1,15 +1,15 @@
 from random import randint
 import random
 random.seed(1)
-
+"""
 row = 10
 col = 10
 mine_count = 4
-""" Use when done testing
+"""
 row = int(input("# of rows: "))
 col = int(input("# of columns: "))
 mine_count = int(input("# of mines: "))
-"""
+
 
 #creates board
 board = [["?" for x in range(col)] for y in range(row)] 
@@ -54,13 +54,14 @@ while(keepGoing):
     while guess_col < 0 or guess_col > col - 1:
         guess_col = int(input("That's not even on the board! Guess Col: "))
     
-    if board[guess_row][guess_col]=="0":
+    if answer[guess_row][guess_col]=="1":
         print("That point was already checked!")
     
     def is_mine(r, c):
         if answer[r][c]=="X":
             return True
         else:
+            answer[r][c]="1"
             return False
     def within(r, c):
         if r < 0 or r > row - 1:
@@ -71,20 +72,20 @@ while(keepGoing):
     
     def search(r, c):
         if not within(r, c): #if out of bounds
-            print(r, c, " is out of bounds")
+            #print(r, c, " is out of bounds")
             return
         
         if not board[r][c]=="?": #if already checked
-            print(r, c, " is not ?")
+            #print(r, c, " is not ?")
             return
         
         if is_mine(r, c): #if a mine
-            print(r, c, " is a mine")
+            #print(r, c, " is a mine")
             return
         
         if perim(r, c) > 0: #it is adjacent to at least one mine
             board[r][c] = str(perim(r, c))
-            print(r, c, " has an adjacent mine")
+            #print(r, c, " has an adjacent mine")
             return
         else:
             board[r][c] = " "
@@ -106,5 +107,8 @@ while(keepGoing):
         keepGoing = False
     else:
         search(guess_row, guess_col)
+        #win condition
+        print_answer()
+        
         print_board()
     turn += 1 
