@@ -10,6 +10,7 @@ row = int(input("# of rows: "))
 col = int(input("# of columns: "))
 mine_count = int(input("# of mines: "))
 
+spaces_left = row * col - mine_count
 
 #creates board
 board = [["?" for x in range(col)] for y in range(row)] 
@@ -82,7 +83,8 @@ while(keepGoing):
         if is_mine(r, c): #if a mine
             #print(r, c, " is a mine")
             return
-        
+        global spaces_left
+        spaces_left-=1
         if perim(r, c) > 0: #it is adjacent to at least one mine
             board[r][c] = str(perim(r, c))
             #print(r, c, " has an adjacent mine")
@@ -107,8 +109,11 @@ while(keepGoing):
         keepGoing = False
     else:
         search(guess_row, guess_col)
-        #win condition
+        if(spaces_left == 0):
+            print("Congrats! You win!")
+            keepGoing = False
         print_answer()
-        
+        print("answer")
         print_board()
+        print("board")
     turn += 1 
