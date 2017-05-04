@@ -36,7 +36,7 @@ def rand_col(board):
     return randint(0, len(board[0]) - 1)
 
 #adding mines to answer
-for x in range(0,mine_count):
+for x in range(0, mine_count):
     mine_row = rand_row(board)
     mine_col = rand_col(board)
     answer[mine_row][mine_col] = "X"
