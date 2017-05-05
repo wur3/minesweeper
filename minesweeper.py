@@ -21,6 +21,7 @@ def print_board():
     for row in board:
         print(" ".join(row))
 print_board()
+print("board")
 
 #prints answer
 def print_answer():
@@ -106,6 +107,7 @@ while(keepGoing):
     if answer[guess_row][guess_col]=="X":
         print("GAME OVER")
         print_answer()
+		print("answer")
         keepGoing = False
     else:
         search(guess_row, guess_col)
