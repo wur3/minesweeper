@@ -1,7 +1,8 @@
 from random import randint
 import random
-random.seed(1)
 """
+random.seed(1)
+
 row = 10
 col = 10
 mine_count = 4
@@ -12,21 +13,28 @@ mine_count = int(input("# of mines: "))
 
 spaces_left = row * col - mine_count
 
-#creates board
+#creates board that is displayed to user
 board = [["?" for x in range(col)] for y in range(row)] 
-answer = [["0" for x in range(col)] for y in range(row)] 
 
-#prints board
-def print_board():
-    for row in board:
-        print(" ".join(row))
-print_board()
-print("board")
+#creates behind the scenes grid: 0=unchecked coordinates, 1=checked coordinates, X=mines
+bts = [["0" for x in range(col)] for y in range(row)] 
 
-#prints answer
-def print_answer():
-    for row in answer:
-        print(" ".join(row))
+#prints board: entering True as the parameter reveals mines
+def print_board(reveal = False):
+    for row in range(len(board)):
+        for col in range(len(board[row])):
+            if(bts[row][col]=='X' and reveal == True):
+                print(" ".join('X'), end=' ')
+            else:
+                print(" ".join(board[row][col]), end=' ')
+        print()
+
+#prints bts
+def print_bts():
+    for row in range(len(bts)):
+        for col in range(len(bts[row])):
+            print(" ".join(bts[row][col]), end=' ')
+        print()
 
 #picks random coordinate for row
 def rand_row(board):
@@ -36,19 +44,20 @@ def rand_row(board):
 def rand_col(board):
     return randint(0, len(board[0]) - 1)
 
-#adding mines to answer
+#adding mines to bts
 for x in range(0, mine_count):
     mine_row = rand_row(board)
     mine_col = rand_col(board)
-    answer[mine_row][mine_col] = "X"
-    
-print_answer()
+    bts[mine_row][mine_col] = "X"
+
 turn = 1
 keepGoing = True
+
 while(keepGoing):
-    print("\nTurn " + str(turn) + "---------------")
+    print("\nTurn " + str(turn) + "--------------------------------------")
+    print_board()
     #restrict guesses to be within board
-    guess_row = int(input("Guess Row: "))
+    guess_row = int(input("\nGuess Row: "))
     while guess_row < 0 or guess_row > row - 1:
         guess_row = int(input("That's not even on the board! Guess Row: "))
     
@@ -56,14 +65,11 @@ while(keepGoing):
     while guess_col < 0 or guess_col > col - 1:
         guess_col = int(input("That's not even on the board! Guess Col: "))
     
-    if answer[guess_row][guess_col]=="1":
-        print("That point was already checked!")
-    
     def is_mine(r, c):
-        if answer[r][c]=="X":
+        if bts[r][c]=="X":
             return True
         else:
-            answer[r][c]="1"
+            bts[r][c]="1"
             return False
     def within(r, c):
         if r < 0 or r > row - 1:
@@ -91,8 +97,8 @@ while(keepGoing):
             #print(r, c, " has an adjacent mine")
             return
         else:
-            board[r][c] = " "
-        
+            board[r][c] = "_"
+            
             for (dr, dc) in [(r+1, c), (r-1, c), (r, c+1), (r, c-1), (r+1, c+1), (r-1, c+1), (r+1, c-1), (r-1, c-1)]:
                 search(dr, dc)
             
@@ -104,18 +110,16 @@ while(keepGoing):
         return count
     
     #if you guess directly on a mine's position
-    if answer[guess_row][guess_col]=="X":
-        print("GAME OVER")
-        print_answer()
-		print("answer")
+    if bts[guess_row][guess_col]=="X":
+        print("\nGAME OVER\n")
+        print_board(True)
         keepGoing = False
     else:
         search(guess_row, guess_col)
         if(spaces_left == 0):
-            print("Congrats! You win!")
+            print("\nCONGRATULATIONS! You win!\n")
+            print_board(True)
             keepGoing = False
-        print_answer()
-        print("answer")
-        print_board()
-        print("board")
+
     turn += 1 
+print("------------------GAME END------------------")
