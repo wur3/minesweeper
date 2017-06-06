@@ -4,9 +4,9 @@ I was first inspired to build this in my senior year of high school for AP Comp 
 
 --TUTORIAL--
 First, you need to enter the desired dimensions of the 'minefield' and the desired number of mines at:
-# of rows:
-# of columns:
-# of mines:
+\# of rows:
+\# of columns:
+\# of mines:
 
 The program randomnly generates a row and column pair to be the position of a mine, as many times as the # of mines entered.
 
