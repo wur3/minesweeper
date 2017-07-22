@@ -1,8 +1,7 @@
 # minesweeper
-Simulates the classic game "Minesweeper" using CLI with Python. Missing the feature of 'flagging' mines.
+Simulates the classic game "Minesweeper" on the command line.
 I was first inspired to build this in my senior year of high school for AP Comp Sci's final project, but I wasn't able to complete the project in time.<br />
 <br />
---TUTORIAL--<br />
 First, you need to enter the desired dimensions of the 'minefield' and the desired number of mines at:<br />
 \# of rows:<br />
 \# of columns:<br />
