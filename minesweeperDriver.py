@@ -10,10 +10,10 @@ m = Minesweeper(row, col, mine_count)
 turn = 1
 keepGoing = True
 
-while(keepGoing):
+while keepGoing:
     print("\nTurn " + str(turn) + "--------------------------------------")
     m.print_board()
-    #restrict guesses to be within board
+    # restrict guesses to be within board
     guess_row = int(input("\nGuess Row: "))
     while guess_row < 0 or guess_row > row - 1:
         guess_row = int(input("That's not even on the board! Guess Row: "))
@@ -22,14 +22,14 @@ while(keepGoing):
     while guess_col < 0 or guess_col > col - 1:
         guess_col = int(input("That's not even on the board! Guess Col: "))
     
-    #if you guess directly on a mine's position
-    if m.bts[guess_row][guess_col]=="X":
+    # if you guess directly on a mine's position
+    if m.bts[guess_row][guess_col] == "X":
         print("\nGAME OVER\n")
         m.print_board(True)
         keepGoing = False
     else:
         m.search(guess_row, guess_col)
-        if(m.spaces_left == 0):
+        if m.spaces_left == 0:
             print("\nCONGRATULATIONS! You win!\n")
             m.print_board(True)
             keepGoing = False
